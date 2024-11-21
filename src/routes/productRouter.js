@@ -3,7 +3,7 @@ import { ProductManager } from '../Dao/ProductManager.js';
 import { validateNumericId } from '../utils.js';
 
 const router = Router();
-const productManager = new ProductManager('./src/Data/products.json'); 
+const productManager = new ProductManager('./src/Data/products.json',); 
 
 router.get('/', async (req, res) => {
     try {
@@ -23,17 +23,16 @@ router.get('/:pid', validateNumericId ,async (req, res) => {
         }
         res.status(200).send(product);
     } catch (error) {
-        res.status(404).send({ error: error.message });
+        res.status(500).send({ error: error.message });
     }
 });
 
 router.post('/', async (req, res) => {
-    const { title, description, code, price, status = true, stock, category, thumbnails } = req.body;
-    const newProduct = { title, description, code, price, status, stock, category, thumbnails };
+    const productData = req.body;
     try {
-        const addedProduct = await productManager.addProduct(newProduct); 
-        req.io.emit("newProduct", addedProduct);
-        res.status(201).send("Producto agregado exitosamente");
+        const newProduct = await productManager.addProduct(productData);
+        req.io.emit("productAdded", newProduct);
+        res.status(201).send(newProduct);
     } catch (error) {
         res.status(400).send({ error: error.message });
     }
@@ -41,21 +40,22 @@ router.post('/', async (req, res) => {
 
 router.put('/:pid', validateNumericId, async (req, res) => {
     const { pid } = req.params;
-    const updatedFields = req.body;
+    const updates = req.body;
     try {
-        const updatedProduct = await productManager.updateProduct(Number(pid), updatedFields); 
+        const updatedProduct = await productManager.updateProduct(Number(pid), updates);
+        req.io.emit("productUpdated", updatedProduct);
         res.status(200).send(updatedProduct);
     } catch (error) {
         res.status(404).send({ error: error.message });
     }
 });
 
-router.delete('/:pid',validateNumericId, async (req, res) => {
+router.delete('/:pid', validateNumericId, async (req, res) => {
     const { pid } = req.params;
     try {
-        await productManager.deleteProduct(Number(pid)); 
-        req.io.emit("deleteProduct", Number(pid));
-        res.status(200).send(`Producto con id ${pid} eliminado`);
+        await productManager.deleteProduct(Number(pid));
+        req.io.emit("productDeleted", pid);
+        res.status(200).send(`Producto con ID ${pid} eliminado.`);
     } catch (error) {
         res.status(404).send({ error: error.message });
     }

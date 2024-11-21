@@ -1,33 +1,26 @@
 import { Router } from 'express';
-import { CartManager } from '../Dao/CartManager.js';
 import { ProductManager } from '../Dao/ProductManager.js';
-import { procesaErrores } from '../utils.js';
+
 
 const router = Router();
-const productManager = new ProductManager('./src/Data/products.json'); 
-const cartManager = new CartManager('./src/Data/carts.json'); 
+const productManager = new ProductManager('./src/Data/products.json',); 
 
-router.get("/", async (req, res) => {
+
+router.get('/', async (req, res) => {
     try {
-        let allProducts = await productManager.getProducts(); 
-        res.render("home", {
-            titulo: "Productos",
-            products: allProducts
-        });
+        const products = await productManager.getProducts();
+        res.render('home', { products });
     } catch (error) {
-        procesaErrores(res, error);
+        res.status(500).send({ error: error.message });
     }
 });
 
-router.get("/realtimeproducts", async (req, res) => {
+router.get('/realtimeproducts', async (req, res) => {
     try {
-        let allProducts = await productManager.getProducts();
-        res.render("realtimeproducts", {
-            titulo: "Productos en tiempo real",
-            products: allProducts
-        });
+        const products = await productManager.getProducts();
+        res.render('realTimeProducts', { products });
     } catch (error) {
-        procesaErrores(res, error);
+        res.status(500).send({ error: error.message });
     }
 });
 

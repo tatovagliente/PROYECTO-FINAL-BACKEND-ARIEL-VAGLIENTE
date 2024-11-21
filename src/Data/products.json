@@ -27,6 +27,19 @@
   },
   {
     "id": 8,
+    "title": "Joggin 4",
+    "description": "Joggin Algodon 4 ",
+    "price": 4000,
+    "thumbnails": [
+      "Joggin4.jpg"
+    ],
+    "code": "hhyy444",
+    "stock": 10,
+    "category": "Ropa",
+    "status": true
+  },
+  {
+    "id": 9,
     "title": "Joggin 6",
     "description": "Joggin Algodon 6 ",
     "price": 6000,
@@ -34,6 +47,19 @@
       "Joggin6.jpg"
     ],
     "code": "hhyy666",
+    "stock": 10,
+    "category": "Ropa",
+    "status": true
+  },
+  {
+    "id": 10,
+    "title": "Joggin 7",
+    "description": "Joggin Algodon 7 ",
+    "price": 7000,
+    "thumbnails": [
+      "Joggin7.jpg"
+    ],
+    "code": "hhyy777",
     "stock": 10,
     "category": "Ropa",
     "status": true

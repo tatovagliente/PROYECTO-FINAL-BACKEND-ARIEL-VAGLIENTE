@@ -1,8 +1,9 @@
 import fs from "fs";
 
 export class ProductManager {
-    constructor(rutaArchivo) {
+    constructor(rutaArchivo, io = null) {
         this.path = rutaArchivo;
+        this.io = io; // Agregar io como propiedad de la clase
     }
 
     async getProducts() {
@@ -50,7 +51,9 @@ export class ProductManager {
 
         await this.saveProducts(products);
 
-        io.emit("newProduct", newProduct);
+        if (this.io) {
+            this.io.emit("newProduct", newProduct); // Emitir solo si io está definido
+        }
 
         return newProduct;
     }
@@ -78,7 +81,9 @@ export class ProductManager {
 
         products.splice(index, 1);
         await this.saveProducts(products);
-        io.emit("updateProducts", products);
+        if (this.io) {
+            this.io.emit("updateProducts", products); // Emitir solo si io está definido
+        }
         return `Producto con id ${id} eliminado exitosamente`;
     }
 }
