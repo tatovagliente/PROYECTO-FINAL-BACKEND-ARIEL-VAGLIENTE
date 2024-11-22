@@ -15,7 +15,7 @@ socket.on("newProduct", (product) => {
 });
 
 socket.on("updateProducts", (products) => {
-    divProducts.innerHTML = ""; // Limpiar la lista actual
+    divProducts.innerHTML = ""; 
     products.forEach((product) => {
         const liProduct = document.createElement("li");
         liProduct.innerHTML = `
